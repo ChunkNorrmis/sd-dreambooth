@@ -55,18 +55,17 @@ per_img_token_list = [
 
 class PersonalizedBase(Dataset):
     def __init__(self,
-                 data_root,
-                 size=None,
-                 repeats=100,
-                 interpolation="bicubic",
-                 flip_p=0.5,
-                 set="train",
-                 placeholder_token="*",
-                 per_image_tokens=False,
-                 center_crop=False,
-                 ):
-
-        self.data_root = data_root
+        data_root,
+        resolution=None,
+        repeats=100,
+        resampler="bicubic",
+        flip_p=0.5,
+        set="train",
+        placeholder_token="*",
+        per_image_tokens=False,
+        center_crop=False,
+                )K
+    self.data_root = data_root
 
         self.image_paths = [os.path.join(self.data_root, file_path) for file_path in os.listdir(self.data_root)]
 
@@ -86,11 +85,11 @@ class PersonalizedBase(Dataset):
             self._length = self.num_images * repeats
 
         self.size = size
-        self.interpolation = {"linear": PIL.Image.LINEAR,
+        self.resampler = {"linear": PIL.Image.LINEAR,
                               "bilinear": PIL.Image.BILINEAR,
                               "bicubic": PIL.Image.BICUBIC,
-                              "lanczos": PIL.Image.LANCZOS,
-                              }[interpolation]
+                              "lanczos":  PIL.Image.LANCZOS,
+                              }[resapler]
         self.flip = transforms.RandomHorizontalFlip(p=flip_p)
 
     def __len__(self):
@@ -115,7 +114,7 @@ class PersonalizedBase(Dataset):
         
         if self.center_crop:
             crop = min(img.shape[0], img.shape[1])
-            h, w, = img.shape[0], img.shape[1]
+            h, w, = img.shape[0], img.shape[1]x
             img = img[(h - crop) // 2:(h + crop) // 2,
                 (w - crop) // 2:(w + crop) // 2]
 
