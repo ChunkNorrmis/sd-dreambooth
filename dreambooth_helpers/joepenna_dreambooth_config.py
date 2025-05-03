@@ -23,7 +23,7 @@ class JoePennaDreamboothConfigSchemaV1:
         regularization_images_folder_path: str,
         token: str,
         class_word: str,
-        flip_percent: float,
+        mirror_prob: float,
         learning_rate: float,
         model_path: str,
         batch_size: int,
