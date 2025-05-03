@@ -139,7 +139,7 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             "--num_workers",
             type=int,
             required=False,
-            default=1,
+            default=0,
             help="number of workers to deploy for data preprocessing"
         )
         parser.add_argument(
@@ -168,7 +168,7 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             type=str,
             required=False,
             choices=["bilinear", "bicubic", "lanczos"],
-            default="lanczos"
+            default="bicubic"
         )
         parser.add_argument(
             "--center_crop",
