@@ -73,10 +73,15 @@ class JoePennaDreamboothConfigSchemaV1:
         if run_seed_everything:
             seed_everything(self.seed)
         
-        self.training_images_folder_path = os.path.relpath(training_images_folder_path)
-
-        if not os.path.exists(self.training_images_folder_path):
+        if os.path.exists(training_images_folder_path):
+            self.training_images_folder_path = os.path.abspath(training_images_folder_path)
+        else:
             raise Exception(f"Training Images Path Not Found: '{self.training_images_folder_path}'.")
+
+        if os.path.exists(regularization_images_folder_path:
+            self.regularization_images_folder_path = os.path.abspath(regularization_images_folder_path)
+        else:
+             raise Exception()
 
         _training_image_paths = [f for f in
                                  glob.glob(os.path.join(self.training_images_folder_path, '**', '*.jpg'), recursive=True) +
