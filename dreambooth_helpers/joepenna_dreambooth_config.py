@@ -43,8 +43,8 @@ class JoePennaDreamboothConfigSchemaV1:
         run_seed_everything: bool=True
     ):
         self.project_name = project_name
-        self.date_time_config = datetime.now(timezone.utc).strftime("%m-%d--%H-%M")
-        self.project_config_filename = f"{self.date_time_config}-{self.project_name}-config.json"
+        self._config = datetime.now(timezone.utc).strftime("%m-%d--%H-%M")
+        self.project_config_filename = f"{self._config}-{self.project_name}-config.json"
         self.debug = debug
         self.gpu = gpu
         self.seed = seed
@@ -148,7 +148,7 @@ class JoePennaDreamboothConfigSchemaV1:
                     regularization_images_folder_path=config_parsed['regularization_images_folder_path'],
                     token=config_parsed['token'],
                     class_word=config_parsed['class_word'],
-                    flip_percent=config_parsed['flip_percent'],
+                    mirror_prob=config_parsed['mirror_probabiity'],
                     learning_rate=config_parsed['learning_rate'],
                     model_path=config_parsed['model_path'],
                     config_date_time=config_parsed['config_date_time'],
