@@ -193,8 +193,7 @@ def get_dreambooth_data_config(config: JoePennaDreamboothConfigSchemaV1) -> dict
             "resampler": config.resampler,
             "center_crop": config.center_crop,
             "mirror_prob": config.mirror_prob,
-            "token_only": config.token_only,
-            "per_image_tokens": False
+          
         }
     }
 
@@ -210,8 +209,7 @@ def get_dreambooth_data_config(config: JoePennaDreamboothConfigSchemaV1) -> dict
             "resampler": config.resampler,
             "center_crop": config.center_crop,
             "mirror_prob": config.mirror_prob,
-            "token_only": config.token_only,
-            "per_image_tokens": False
+            
         }
     }
 
