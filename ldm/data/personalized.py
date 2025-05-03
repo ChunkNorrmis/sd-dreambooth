@@ -23,7 +23,7 @@ class PersonalizedBase(Dataset):
         resolution,
         resampler,
         center_crop,
-        flip_p,
+        mirror_prob,
         mixing_prob=0.25,
         per_image_tokens=False,
         token_only=False,
@@ -53,7 +53,7 @@ class PersonalizedBase(Dataset):
         if set == "train":
             self._length = self.num_images * repeats
 
-        self.flip = transforms.RandomHorizontalFlip(p=flip_p)
+        self.flip = transforms.RandomHorizontalFlip(p=mirror_prob)
         self.reg = reg
         if self.reg and self.coarse_class_text:
             self.reg_tokens = OrderedDict([('C', self.coarse_class_text)])
