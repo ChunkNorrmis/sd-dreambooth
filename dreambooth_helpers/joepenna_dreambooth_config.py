@@ -78,7 +78,7 @@ class JoePennaDreamboothConfigSchemaV1:
         else:
             raise Exception(f"Training Images Path Not Found: '{self.training_images_folder_path}'.")
 
-        if os.path.exists(regularization_images_folder_path:
+        if os.path.exists(regularization_images_folder_path):
             self.regularization_images_folder_path = os.path.abspath(regularization_images_folder_path)
         else:
              raise Exception()
