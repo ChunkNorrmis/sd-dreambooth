@@ -190,7 +190,7 @@ class JoePennaDreamboothConfigSchemaV1:
             print(f"✅ {self.project_config_filename} successfully generated.  Proceed to training.")
 
     def get_training_folder_name(self) -> str:
-        return f"{self.config_date_time}_{self.project_name}"
+        return f"{self._config}_{self.project_name}"
 
     def log_directory(self) -> str:
         return os.path.join("logs", self.get_training_folder_name())
