@@ -77,15 +77,15 @@ class PersonalizedBase(Dataset):
 
         # default to score-sde preprocessing
         img = np.array(image).astype(np.uint8)
-
+        H, W, = img.shape[0], img.shape[1]
+        max = min(H, W)
         if self.center_crop and not H == W:
-            crop = min(img.shape[0], img.shape[1])
-            h, w, = img.shape[0], img.shape[1]
-            img = img[(h - crop) // 2:(h + crop) // 2,
-                      (w - crop) // 2:(w + crop) // 2]
+            img = img[
+                (h - crop) // 2:(h + crop) // 2,
+                (w - crop) // 2:(w + crop) // 2]
         image = Image.fromarray(img)
         
-        if self.resolution is not None and not self.resolution == crop:
+        if self.resolution is not None and not self.resolution == max:
             image = image.resize(
                 (self.resolution, self.resolution),
                 resample=self.resampler,
