@@ -39,8 +39,7 @@ class JoePennaDreamboothConfigSchemaV1:
         token_only: bool,
         center_crop: bool,
         test: str,
-        flip_percent
-        use_ema: bool,
+        flip_percent,
         accum_num_grads: int,
         model_repo_id: str=None,
         run_seed_everything: bool=True
@@ -63,7 +62,6 @@ class JoePennaDreamboothConfigSchemaV1:
         self.learning_rate = learning_rate
         self.token = token
         self.token_only = token_only
-        self.use_ema = use_ema
         self.accum_num_grads = accum_num_grads
         self.seed = seed
         self.debug = debug
