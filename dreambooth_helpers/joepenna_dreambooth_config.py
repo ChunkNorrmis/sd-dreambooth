@@ -151,7 +151,6 @@ class JoePennaDreamboothConfigSchemaV1:
                     mirror_prob=config_parsed['mirror_probabiity'],
                     learning_rate=config_parsed['learning_rate'],
                     model_path=config_parsed['model_path'],
-                    config_date_time=config_parsed['config_date_time'],
                     seed=config_parsed['seed'],
                     debug=config_parsed['debug'],
                     gpu=config_parsed['gpu'],
