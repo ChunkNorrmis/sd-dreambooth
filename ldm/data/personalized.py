@@ -51,7 +51,7 @@ class PersonalizedBase(Dataset):
                 per_img_token_list), f"Can't use per-image tokens when the training set contains more than {len(per_img_token_list)} tokens. To enable larger sets, add more tokens to 'per_img_token_list'."
 
         if set == "train":
-            self._length = self.num_images * repeats
+            self._length = int(self.num_images * repeats)
 
         self.flip = transforms.RandomHorizontalFlip(p=mirror_prob)
         self.reg = reg
