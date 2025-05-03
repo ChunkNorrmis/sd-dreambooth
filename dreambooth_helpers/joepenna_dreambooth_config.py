@@ -64,33 +64,16 @@ class JoePennaDreamboothConfigSchemaV1:
         self.token_only = token_only
         self.use_ema = use_ema
         self.accum_num_grads = accum_num_grads
-
-       
-        if self.project_name is None or self.project_name == '':
-            raise Exception("'--project_name': Required.")
-
-       
-
-       # parameter values
-        self.project_config_filename = f"{self.config_date_time}-{self.project_name}-config.json"
-
         self.seed = seed
-
-        # Global seed
-        if run_seed_everything:
-            seed_everything(self.seed)
-
         self.debug = debug
         self.gpu = gpu
-
-        self.max_training_steps = max_training_steps
-        if self.max_training_steps <= 0:
-            raise Exception("'--max_training_steps': Required. Must be > 0.")
-
         self.save_every_x_steps = save_every_x_steps
         if self.save_every_x_steps < 0:
             raise Exception("--save_every_x_steps: must be greater than or equal to 0")
-
+        
+        if run_seed_everything:
+            seed_everything(self.seed)
+        
         self.training_images_folder_path = training_images_folder_path
 
         if not os.path.exists(self.training_images_folder_path):
@@ -108,6 +91,12 @@ class JoePennaDreamboothConfigSchemaV1:
             raise Exception(f"No Training Images (*.png, *.jpg, *.jpeg) found in '{self.training_images_folder_path}'.")
 
         self.training_images_count = len(_training_image_paths)
+        
+        if max_training_steps <= 0:
+            self.max_training_steps = self.training_images_count * self.repeats
+        else:
+            self.max_training_steps = max_training_steps
+        
         self.training_images = _training_image_paths
 
         if token_only is False and regularization_images_folder_path is not None and regularization_images_folder_path != '':
