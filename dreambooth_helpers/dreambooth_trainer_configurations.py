@@ -175,7 +175,7 @@ def get_dreambooth_data_config(config: JoePennaDreamboothConfigSchemaV1) -> dict
             "resolution": config.resolution,
             "resampler": config.resampler,
             "center_crop": config.center_crop,
-            "flip_p": config.flip_p,
+            "mirror_prob": config.mirror_prob,
             "token_only": False,
             "per_image_tokens": False
         }
@@ -192,7 +192,7 @@ def get_dreambooth_data_config(config: JoePennaDreamboothConfigSchemaV1) -> dict
             "resolution": config.resolution,
             "resampler": config.resampler,
             "center_crop": config.center_crop,
-            "flip_p": config.flip_p,
+            "mirror_prob": config.mirror_prob,
             "token_only": config.token_only,
             "per_image_tokens": False
         }
@@ -209,7 +209,7 @@ def get_dreambooth_data_config(config: JoePennaDreamboothConfigSchemaV1) -> dict
             "resolution": config.resolution,
             "resampler": config.resampler,
             "center_crop": config.center_crop,
-            "flip_p": config.flip_p,
+            "mirror_prob": config.mirror_prob,
             "token_only": config.token_only,
             "per_image_tokens": False
         }
@@ -232,7 +232,7 @@ def get_dreambooth_data_config(config: JoePennaDreamboothConfigSchemaV1) -> dict
                     "resolution": config.resolution,
                     "resampler": config.resampler,
                     "center_crop": config.center_crop,
-                    "flip_p": config.flip_p,
+                    "mirror_prob": config.mirror_prob,
                     "token_only": config.token_only,
                     "per_image_tokens": False
                 }
@@ -269,7 +269,7 @@ def get_dreambooth_lightning_config(config: JoePennaDreamboothConfigSchemaV1) ->
             "accelerator": "gpu",
             "devices": f"{config.gpu},",
             "benchmark": True,
-            "accumulate_grad_batches": 1,
+            "accumulate_grad_batches": config.accum_num_grads,
             "max_steps": config.max_training_steps,
         }
     }
