@@ -81,10 +81,9 @@ class JoePennaDreamboothConfigSchemaV1:
             raise Exception(f"No Training Images (*.png, *.jpg, *.jpeg) found in '{self.training_images_folder_path}'.")
 
         self.max_training_steps = max_training_steps
-        if not self.max_training_steps >= 0:
-            as sds
-            
-             self.max_training_steps = len(_training_images_paths) * self.repeats
+        
+        if not self.max_training_steps > 0:
+            self.max_training_steps = int(len(_training_images_paths) * self.repeats)
 
         if self.token_only is False:
             self.class_word = class_word
