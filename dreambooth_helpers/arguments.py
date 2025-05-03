@@ -51,6 +51,7 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             "--max_training_steps",
             type=int,
             required=False,
+            default=0,
             help="Number of training steps to run"
         )
 
