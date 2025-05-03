@@ -18,16 +18,16 @@ class PersonalizedBase(Dataset):
         data_root,
         set,
         repeats,
-        placeholder_token,
-        coarse_class_text,
         resolution,
         resampler,
         center_crop,
         mirror_prob,
+        reg=False,
+        placeholder_token="rock",
+        coarse_class_text=None,
         mixing_prob=0.25,
         per_image_tokens=False,
-        token_only=False,
-        reg=False
+        token_only=False
     ):
         self.data_root = data_root
         self.image_paths = find_images(self.data_root)
@@ -90,7 +90,7 @@ class PersonalizedBase(Dataset):
                 (self.resolution, self.resolution),
                 resample=self.resampler,
                 reducing_gap=3)
-            image = ImageEnhance.Sharpness(image).enhance(1.2)
+            #image = ImageEnhance.Sharpness(image).enhance(1.2)
 
         image = self.flip(image)
         image = np.array(image).astype(np.uint8)
