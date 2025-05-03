@@ -183,10 +183,6 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             default=None
         )
         parser.add_argument(
-            "--use_ema",
-            action="store_true"
-        )
-        parser.add_argument(
             "--accum_num_grads",
             type=int,
             required=False,
@@ -228,7 +224,6 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             resampler=opt.resampler,
             center_crop=opt.center_crop,
             test=opt.test,
-            use_ema=opt.use_ema,
             accum_num_grads=opt.accum_num_grads
         )
 
