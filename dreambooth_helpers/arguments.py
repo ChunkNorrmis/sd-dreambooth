@@ -98,11 +98,11 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
         )
 
         parser.add_argument(
-            "--flip_p",
+            "--mirror_prob",
             type=float,
             required=False,
             default=0.5,
-            help="Flip Percentage "
+            help="mirror Percentage "
                  "Example: if set to 0.5, will flip (mirror) your training images 50% of the time."
                  "This helps expand your dataset without needing to include more training images."
                  "This can lead to worse results for face training since most people's faces are not perfectly symmetrical."
@@ -212,7 +212,7 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             token=opt.token,
             token_only=opt.token_only,
             class_word=opt.class_word,
-            flip_percent=opt.flip_p,
+            mirror_prob=opt.mirror_prob,
             learning_rate=opt.learning_rate,
             model_repo_id='',
             model_path=opt.training_model,
