@@ -9,7 +9,6 @@ from datetime import datetime, timezone
 import torch
 from pytorch_lightning import seed_everything
 
-
 class JoePennaDreamboothConfigSchemaV1:
     def __init__(self, schema=1):
         super().__init__()
@@ -24,7 +23,7 @@ class JoePennaDreamboothConfigSchemaV1:
         regularization_images_folder_path: str,
         token: str,
         class_word: str,
-        mirror_prob: float,
+        flip_percent: float,
         learning_rate: float,
         model_path: str,
         batch_size: int,
@@ -39,7 +38,7 @@ class JoePennaDreamboothConfigSchemaV1:
         token_only: bool,
         center_crop: bool,
         test: str,
-        accum_num_grads: int,
+        accum_grad: int,
         model_repo_id: str=None,
         run_seed_everything: bool=True
     ):
@@ -62,69 +61,53 @@ class JoePennaDreamboothConfigSchemaV1:
         self.token = token
         self.token_only = token_only
         self.accum_num_grads = accum_num_grads
-        self.seed = seed
-        self.debug = debug
-        self.gpu = gpu
-        
-        
-        if save_every_x_steps > 0:
-            self.save_every_x_steps = save_every_x_steps
-                   
-        if run_seed_everything:
-            seed_everything(self.seed)
-        
+
+
         if os.path.exists(training_images_folder_path):
-            self.training_images_folder_path = os.path.abspath(training_images_folder_path)
+            self.training_images_folder_path = os.path.relpath(training_images_folder_path)
         else:
-            raise Exception(f"Training Images Path Not Found: '{self.training_images_folder_path}'.")
+            raise Exception(f"Training Images Path Not Found: '{os.path.relpath(self.training_images_folder_path)}'.")
 
-        if os.path.exists(regularization_images_folder_path):
-            self.regularization_images_folder_path = os.path.abspath(regularization_images_folder_path)
-        else:
-             raise Exception()
+        seed_everything(self.seed)
 
-        _training_image_paths = [f for f in
-                                 glob.glob(os.path.join(self.training_images_folder_path, '**', '*.jpg'), recursive=True) +
-                                 glob.glob(os.path.join(self.training_images_folder_path, '**', '*.jpeg'), recursive=True) +
-                                 glob.glob(os.path.join(self.training_images_folder_path, '**', '*.png'), recursive=True)
-                             ]
+        _training_images_paths = [i for i in
+            glob.glob(os.path.join(self.training_images_folder_path, '**', '*.jpg'), recursive=True) +
+            glob.glob(os.path.join(self.training_images_folder_path, '**', '*.jpeg'), recursive=True) +
+            glob.glob(os.path.join(self.training_images_folder_path, '**', '*.png'), recursive=True)
+        ]
+        _training_images_paths = [os.path.relpath(i, self.training_images_folder_path) for i in _training_images_paths]
 
-        _training_image_paths = [os.path.relpath(f, self.training_images_folder_path) for f in _training_image_paths]
-
-        if len(_training_image_paths) <= 0:
+        if len(_training_images_paths) <= 0:
             raise Exception(f"No Training Images (*.png, *.jpg, *.jpeg) found in '{self.training_images_folder_path}'.")
 
-        self.training_images_count = len(_training_image_paths)
-        
         if max_training_steps <= 0:
-            self.max_training_steps = self.training_images_count * self.repeats
+            self.max_training_steps = len(_training_images_paths) * self.repeats
         else:
             self.max_training_steps = max_training_steps
-        
-        self.training_images = _training_image_paths
 
-        if token_only is False and regularization_images_folder_path is not None and regularization_images_folder_path != '':
-            self.regularization_images_folder_path = os.path.relpath(regularization_images_folder_path)
-
-        self.token = token
-        if self.token is None or self.token == '':
-            raise Exception(f"Token not provided.")
-
-        self.token_only = token_only
-        if token_only is False:
+        if self.token_only is False:
             self.class_word = class_word
-       
-        if not mirror_prob < 0 and not mirror_prob > 1:
+            if regularization_images_folder_path and os.path.exists(regularization_images_folder_path):
+                self.regularization_images_folder_path = os.path.relpath(regularization_images_folder_path)
+            else:
+                raise Exception(f"Regularization Images Path Not Found: '{os.path.relpath(self.regularization_images_folder_path)}'.")
+
+        if model_path.endswith('.ckpt') and os.path.exists(model_path):
+            self.model_path = os.path.relpath(model_path)
+        else:
+            from huggingface_hub import hf_hub_download
+            import joblib
+
+            model_path = model_path.replace('/', '.')
+            REPO_ID, FILENAME = os.path.splitext(model_path)
+            self.model_path = joblib.load(hf_hub_download(repo_id=REPO_ID, filename=FILENAME))
+
+        if mirror_prob > 0 and mirror_prob < 1:
             self.mirror_prob = mirror_prob
-        
-        self.learning_rate = learning_rate
-        self.model_repo_id = model_repo_id
-        self.model_path = model_path
-        if not os.path.exists(self.model_path):
-            raise Exception(f"Model Path Not Found: '{self.model_path}'.")
+        else:
+            raise Exception("--mirror_prob: must be between 0 and 1")
 
         self.validate_gpu_vram()
-
         self._create_log_folders()
 
     def validate_gpu_vram(self):
