@@ -39,7 +39,7 @@ class JoePennaDreamboothConfigSchemaV1:
         token_only: bool,
         center_crop: bool,
         test: str,
-        flip_percent,
+        mirror_prob,
         accum_num_grads: int,
         model_repo_id: str=None,
         run_seed_everything: bool=True
@@ -111,14 +111,11 @@ class JoePennaDreamboothConfigSchemaV1:
         self.token_only = token_only
         if token_only is False:
             self.class_word = class_word
-
-        self.flip_percent = flip_percent
-        if self.flip_percent < 0 or self.flip_percent > 1:
-            raise Exception("--flip_p: must be between 0 and 1")
-
+       
+        if not mirror_prob < 0 and not mirror_prob > 1:
+            self.mirror_prob = mirror_prob
         self.learning_rate = learning_rate
         self.model_repo_id = model_repo_id
-
         self.model_path = model_path
         if not os.path.exists(self.model_path):
             raise Exception(f"Model Path Not Found: '{self.model_path}'.")
