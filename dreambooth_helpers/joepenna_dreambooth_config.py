@@ -65,10 +65,11 @@ class JoePennaDreamboothConfigSchemaV1:
         self.seed = seed
         self.debug = debug
         self.gpu = gpu
-        self.save_every_x_steps = save_every_x_steps
-        if self.save_every_x_steps < 0:
-            raise Exception("--save_every_x_steps: must be greater than or equal to 0")
         
+        
+        if save_every_x_steps > 0:
+            self.save_every_x_steps = save_every_x_steps
+                   
         if run_seed_everything:
             seed_everything(self.seed)
         
@@ -113,6 +114,7 @@ class JoePennaDreamboothConfigSchemaV1:
        
         if not mirror_prob < 0 and not mirror_prob > 1:
             self.mirror_prob = mirror_prob
+        
         self.learning_rate = learning_rate
         self.model_repo_id = model_repo_id
         self.model_path = model_path
