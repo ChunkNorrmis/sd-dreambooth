@@ -17,7 +17,6 @@ class JoePennaDreamboothConfigSchemaV1:
     def saturate(
         self,
         project_name: str,
-        max_training_steps: int,
         save_every_x_steps: int,
         training_images_folder_path: str,
         regularization_images_folder_path: str,
@@ -39,6 +38,7 @@ class JoePennaDreamboothConfigSchemaV1:
         center_crop: bool,
         test: str,
         accum_num_grads: int,
+        max_training_steps=0,
         model_repo_id: str=None,
         run_seed_everything: bool=True
     ):
@@ -82,9 +82,11 @@ class JoePennaDreamboothConfigSchemaV1:
 
         self.max_training_steps = max_training_steps
         
-        if self.max_training_steps are None:
+        if max_training_steps <= 0:
             self.max_training_steps = int(len(_training_images_paths) * self.repeats)
-
+        else: 
+            self.max_training_steps = max_training_steps
+            
         if self.token_only is False:
             self.class_word = class_word
             if regularization_images_folder_path and os.path.exists(regularization_images_folder_path):
