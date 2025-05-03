@@ -236,7 +236,7 @@ def get_dreambooth_data_config(config: JoePennaDreamboothConfigSchemaV1) -> dict
                     "token_only": config.token_only,
                     "per_image_tokens": False
                 }
-            }
+            },
             "reg": reg_block if config.regularization_images_folder_path is not None and config.token_only is False else False,
             "validation": val_block,
             "test": test_block if config.test else None
