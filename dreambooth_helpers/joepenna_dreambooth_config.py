@@ -104,7 +104,7 @@ class JoePennaDreamboothConfigSchemaV1:
             REPO_ID, FILENAME = os.path.splitext(model_path)
             self.model_path = joblib.load(hf_hub_download(repo_id=REPO_ID, filename=FILENAME))
 
-        if mirror_prob > 0 and mirror_prob < 1:
+        if not mirror_prob < 0 and not mirror_prob > 1:
             self.mirror_prob = mirror_prob
         else:
             raise Exception("--mirror_prob: must be between 0 and 1")
