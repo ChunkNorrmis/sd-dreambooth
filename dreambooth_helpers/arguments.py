@@ -128,7 +128,7 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             required=False,
             help="Specify a GPU other than 0 to use for training.  Multi-GPU support is not currently implemented."
         )
-         parser.add_argument(
+        parser.add_argument(
             "--batch_size",
             type=int,
             required=False,
