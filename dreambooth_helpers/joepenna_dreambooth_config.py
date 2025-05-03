@@ -11,72 +11,67 @@ from pytorch_lightning import seed_everything
 
 
 class JoePennaDreamboothConfigSchemaV1:
-    def __init__(self):
-        self.schema: int = 1
-        self.config_date_time: str = ''
-        self.project_config_filename: str = ''
-
-        # Project
-        self.project_name: str = ''
-        self.seed: int = 23
-        self.debug: bool = False
-        self.gpu: int = 0
-
-        # Training Steps
-        self.max_training_steps: int = 2000
-        self.save_every_x_steps: int = 0
-
-        # Training & Regularization Images
-        self.training_images_folder_path: str = ''
-        self.training_images_count: int = 0
-        self.training_images: list[str] = []
-        self.regularization_images_folder_path: str = None
-
-        # Token and Class
-        self.token: str = ''
-        self.token_only: bool = False
-        self.class_word: str = ''
-
-        # Training Params
-        self.flip_percent: float = 0.5
-        self.learning_rate: float = 1.0e-06
-
-        # Model Info
-        self.model_repo_id: str = ''
-        self.model_path: str = ''
+    def __init__(self, schema=1):
+        super().__init__()
+        self.schema = schema
 
     def saturate(
-            self,
-            project_name: str,
-            max_training_steps: int,
-            save_every_x_steps: int,
-            training_images_folder_path: str,
-            regularization_images_folder_path: str,
-            token: str,
-            class_word: str,
-            flip_percent: float,
-            learning_rate: float,
-            model_path: str,
-            config_date_time: str = None,
-            seed: int = 23,
-            debug: bool = False,
-            gpu: int = 0,
-            model_repo_id: str = '',
-            token_only: bool = False,
-            run_seed_everything: bool = True,
+        self,
+        project_name: str,
+        max_training_steps: int,
+        save_every_x_steps: int,
+        training_images_folder_path: str,
+        regularization_images_folder_path: str,
+        token: str,
+        class_word: str,
+        mirror_prob: float,
+        learning_rate: float,
+        model_path: str,
+        batch_size: int,
+        num_workers: int,
+        repeats: int,
+        val_repeats: int,
+        resolution: int,
+        resampler: str,
+        seed: int,
+        debug: bool,
+        gpu: int,
+        token_only: bool,
+        center_crop: bool,
+        test: str,
+        use_ema: bool,
+        accum_num_grads: int,
+        model_repo_id: str=None,
+        run_seed_everything: bool=True
     ):
-
-        # Map the values
         self.project_name = project_name
+        self.date_time_config = datetime.now(timezone.utc).strftime("%m-%d--%H-%M")
+        self.project_config_filename = f"{self.date_time_config}-{self.project_name}-config.json"
+        self.debug = debug
+        self.gpu = gpu
+        self.seed = seed
+        self.save_every_x_steps = save_every_x_steps
+        self.batch_size = batch_size
+        self.num_workers = num_workers
+        self.repeats = repeats
+        self.val_repeats = val_repeats
+        self.resolution = resolution
+        self.resampler = resampler
+        self.center_crop = center_crop
+        self.test = test
+        self.learning_rate = learning_rate
+        self.token = token
+        self.token_only = token_only
+        self.use_ema = use_ema
+        self.accum_num_grads = accum_num_grads
+
+       
         if self.project_name is None or self.project_name == '':
             raise Exception("'--project_name': Required.")
 
-        if config_date_time is None:
-            self.config_date_time = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%S")
-        else:
-            self.config_date_time = config_date_time
+       
 
-        # parameter values
+       # parameter values
         self.project_config_filename = f"{self.config_date_time}-{self.project_name}-config.json"
 
         self.seed = seed
