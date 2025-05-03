@@ -38,7 +38,7 @@ class JoePennaDreamboothConfigSchemaV1:
         token_only: bool,
         center_crop: bool,
         test: str,
-        accum_grad: int,
+        accum_num_grads: int,
         model_repo_id: str=None,
         run_seed_everything: bool=True
     ):
