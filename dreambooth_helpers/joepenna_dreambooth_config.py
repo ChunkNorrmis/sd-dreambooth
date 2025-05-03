@@ -80,7 +80,7 @@ class JoePennaDreamboothConfigSchemaV1:
         if len(_training_images_paths) <= 0:
             raise Exception(f"No Training Images (*.png, *.jpg, *.jpeg) found in '{self.training_images_folder_path}'.")
 
-        if int(max_training_steps) = 0:
+        if int(max_training_steps) == 0:
             self.max_training_steps = int(len(_training_images_paths) * self.repeats)
         else:
             self.max_training_steps = int(max_training_steps)
