@@ -39,6 +39,7 @@ class JoePennaDreamboothConfigSchemaV1:
         token_only: bool,
         center_crop: bool,
         test: str,
+        flip_percent
         use_ema: bool,
         accum_num_grads: int,
         model_repo_id: str=None,
