@@ -74,26 +74,24 @@ class PersonalizedBase(Dataset):
             example["caption"] = generic_captions_from_path(image_path, self.data_root, self.reg_tokens)
         else:
             example["caption"] = caption_from_path(image_path, self.data_root, self.coarse_class_text, self.placeholder_token)
-
-        # default to score-sde preprocessing
-        img = np.array(image).astype(np.uint8)
-        H, W, = img.shape[0], img.shape[1]
+            
+        H, W, = image.height, image.width
         max = min(H, W)
         if self.center_crop and not H == W:
-            img = img[
-                (h - crop) // 2:(h + crop) // 2,
-                (w - crop) // 2:(w + crop) // 2]
-        image = Image.fromarray(img)
-        
+            image = [(l, t, r, b) for l, t, r, b in image.crop([
+                (W - max) // 2, (H - max) // 2,
+                (W + max) // 2, (H + max) // 2
+            ])
+        image = self.flip(image)
         if self.resolution is not None and not self.resolution == max:
             image = image.resize(
                 (self.resolution, self.resolution),
                 resample=self.resampler,
-                reducing_gap=3)
+                reducing_gap=3
+            )
             image = ImageEnhance.Sharpness(image).enhance(1.05)
 
-        image = self.flip(image)
-        image = np.array(image).astype(np.uint8)
-        example["image"] = (image / 127.5 - 1.0).astype(np.float32)
+        img = np.array(image).astype(np.uint8)
+        example["image"] = (img / 127.5 - 1.0).astype(np.float32)
         
         return example
