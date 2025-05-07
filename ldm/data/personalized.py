@@ -90,7 +90,7 @@ class PersonalizedBase(Dataset):
                 (self.resolution, self.resolution),
                 resample=self.resampler,
                 reducing_gap=3)
-            #image = ImageEnhance.Sharpness(image).enhance(1.2)
+            image = ImageEnhance.Sharpness(image).enhance(1.05)
 
         image = self.flip(image)
         image = np.array(image).astype(np.uint8)
