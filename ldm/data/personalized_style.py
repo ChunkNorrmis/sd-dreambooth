@@ -57,21 +57,20 @@ class PersonalizedBase(Dataset):
     def __init__(
         self,
         data_root,
-        resolution=None,
-        repeats=100,
-        resampler="bicubic",
-        flip_p=0.5,
-        set="train",
-        placeholder_token="*",
-        per_image_tokens=False,
-        center_crop=False
+        resolution,
+        repeats,
+        resampler,
+        mirror_prob,
+        set,
+        center_crop,
+        placeholder_token="rock",
+        per_image_tokens=False
     ):
         super().__init__()
         self.data_root = data_root
 
         self.image_paths = [os.path.join(self.data_root, file_path) for file_path in os.listdir(self.data_root)]
 
-        # self._length = len(self.image_paths)
         self.num_images = len(self.image_paths)
         self._length = self.num_images 
 
@@ -91,7 +90,7 @@ class PersonalizedBase(Dataset):
                               "bilinear": PIL.Image.BILINEAR,
                               "bicubic": PIL.Image.BICUBIC,
                               "lanczos":  PIL.Image.LANCZOS,
-                              }[resapler]
+                              }[resampler]
         self.flip = transforms.RandomHorizontalFlip(p=flip_p)
 
     def __len__(self):
