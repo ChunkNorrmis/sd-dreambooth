@@ -88,12 +88,11 @@ class PersonalizedBase(Dataset):
             image = image.resize(
                 (self.resolution, self.resolution),
                 resample=self.resampler,
-                reducing_gap=3
-            )
-            image = ImageEnhance.Sharpness(image).enhance(1.05)
+                reducing_gap=3)
         
         image = self.flip(image)
-        img = np.array(image).astype(np.uint8)
-        example["image"] = (img / 127.5 - 1.0).astype(np.float32)
+        
+image = np.array(image).astype(np.uint8)
+        example["image"] = (image / 127.5 - 1.0).astype(np.float32)
         
         return example
