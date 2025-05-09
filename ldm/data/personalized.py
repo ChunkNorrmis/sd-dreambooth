@@ -83,7 +83,7 @@ class PersonalizedBase(Dataset):
                 (W + max) // 2, (H + max) // 2
             ]
             image = image.crop(cropped)
-        image = self.flip(image)
+                
         if self.resolution is not None and not self.resolution == max:
             image = image.resize(
                 (self.resolution, self.resolution),
@@ -91,7 +91,8 @@ class PersonalizedBase(Dataset):
                 reducing_gap=3
             )
             image = ImageEnhance.Sharpness(image).enhance(1.05)
-
+        
+        image = self.flip(image)
         img = np.array(image).astype(np.uint8)
         example["image"] = (img / 127.5 - 1.0).astype(np.float32)
         
