@@ -166,7 +166,7 @@ class JoePennaDreamboothConfigSchemaV1:
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
-    def create_checkpoint_file_name(self, steps: str)
+    def create_checkpoint_file_name(self, steps: str):
         date_string = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%S")
         return f"{date_string}_{self.project_name}_{int(steps):05d}_steps".replace(" ", "_")
 
