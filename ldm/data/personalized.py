@@ -87,8 +87,7 @@ class PersonalizedBase(Dataset):
         if self.resolution is not None and not self.resolution == max:
             image = image.resize(
                 (self.resolution, self.resolution),
-                resample=self.resampler,
-                reducing_gap=3)
+                resample=self.resampler)
         
         image = self.flip(image)
         
