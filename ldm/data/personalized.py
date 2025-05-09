@@ -30,6 +30,8 @@ class PersonalizedBase(Dataset):
         token_only=False
     ):
         self.data_root = data_root
+        self.set = set
+        self.reg = reg
         self.image_paths = find_images(self.data_root)
         self.num_images = len(self.image_paths)
         self._length = self.num_images
@@ -50,17 +52,19 @@ class PersonalizedBase(Dataset):
             assert self.num_images < len(
                 per_img_token_list), f"Can't use per-image tokens when the training set contains more than {len(per_img_token_list)} tokens. To enable larger sets, add more tokens to 'per_img_token_list'."
 
-        if set == "train":
-            self._length = int(self.num_images * repeats)
+        if self.set == "train":
+            self._length = self.num_images * repeats
 
         self.flip = transforms.RandomHorizontalFlip(p=mirror_prob)
-        self.reg = reg
+        
         if self.reg and self.coarse_class_text:
             self.reg_tokens = OrderedDict([('C', self.coarse_class_text)])
 
+    
     def __len__(self):
         return self._length
 
+    
     def __getitem__(self, i):
         example = {}
         image_path = self.image_paths[i % self.num_images]
@@ -85,9 +89,7 @@ class PersonalizedBase(Dataset):
             image = image.crop(cropped)
                 
         if self.resolution is not None and not self.resolution == max:
-            image = image.resize(
-                (self.resolution, self.resolution),
-                resample=self.resampler)
+            image = image.resize((self.resolution, self.resolution), resample=self.resampler)
         
         image = self.flip(image)
         
