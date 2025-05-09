@@ -54,7 +54,8 @@ per_img_token_list = [
 ]
 
 class PersonalizedBase(Dataset):
-    def __init__(self,
+    def __init__(
+        self,
         data_root,
         resolution=None,
         repeats=100,
@@ -63,9 +64,10 @@ class PersonalizedBase(Dataset):
         set="train",
         placeholder_token="*",
         per_image_tokens=False,
-        center_crop=False,
-                )K
-    self.data_root = data_root
+        center_crop=False
+    ):
+        super().__init__()
+        self.data_root = data_root
 
         self.image_paths = [os.path.join(self.data_root, file_path) for file_path in os.listdir(self.data_root)]
 
@@ -106,22 +108,25 @@ class PersonalizedBase(Dataset):
             text = random.choice(imagenet_dual_templates_small).format(self.placeholder_token, per_img_token_list[i % self.num_images])
         else:
             text = random.choice(imagenet_templates_small).format(self.placeholder_token)
-            
+
         example["caption"] = text
-
+        H, W = image.height, image.width
+        max = min(H, W)
         # default to score-sde preprocessing
-        img = np.array(image).astype(np.uint8)
+        if self.center_crop and not H == W:
+            cropped = [
+                (W - max) // 2, (H - max) // 2,
+                (W + max) // 2, (H + max) // 2
+            ]
+            image = image.crop(cropped)
         
-        if self.center_crop:
-            crop = min(img.shape[0], img.shape[1])
-            h, w, = img.shape[0], img.shape[1]x
-            img = img[(h - crop) // 2:(h + crop) // 2,
-                (w - crop) // 2:(w + crop) // 2]
-
-        image = Image.fromarray(img)
         if self.size is not None:
-            image = image.resize((self.size, self.size), resample=self.interpolation)
-
+            image = image.resize(
+                (self.size, self.size),
+                resample=self.interpolation,
+                reducing_gap=3
+            )
+        
         image = self.flip(image)
         image = np.array(image).astype(np.uint8)
         example["image"] = (image / 127.5 - 1.0).astype(np.float32)
