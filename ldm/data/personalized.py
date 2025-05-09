@@ -61,7 +61,7 @@ class PersonalizedBase(Dataset):
     def __len__(self):
         return self._length
 
-    def __getitem__(self                                                                                                                                            , i):
+    def __getitem__(self, i):
         example = {}
         image_path = self.image_paths[i % self.num_images]
         image = Image.open(image_path)
