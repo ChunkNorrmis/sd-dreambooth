@@ -75,6 +75,7 @@ class JoePennaDreamboothConfigSchemaV1:
             glob.glob(os.path.join(self.training_images_folder_path, '**', '*.jpeg'), recursive=True) +
             glob.glob(os.path.join(self.training_images_folder_path, '**', '*.png'), recursive=True)
         ]
+        training_images_count = len(_training_images_paths)
         _training_images_paths = [os.path.relpath(i, self.training_images_folder_path) for i in _training_images_paths]
 
         if len(_training_images_paths) <= 0:
@@ -165,13 +166,9 @@ class JoePennaDreamboothConfigSchemaV1:
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
-    def create_checkpoint_file_name(self, steps: str):
+    def create_checkpoint_file_name(self, steps: str)
         date_string = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%S")
-        return f"{date_string}_{self.project_name}_" \
-               f"{int(steps):05d}_steps_" \
-               f"{self.training_images_count}_training_images_" \
-               f"{self.token}_token_" \
-               f"{self.class_word}_class_word.ckpt".replace(" ", "_")
+        return f"{date_string}_{self.project_name}_{int(steps):05d}_steps".replace(" ", "_")
 
     def save_config_to_file(
             self,
