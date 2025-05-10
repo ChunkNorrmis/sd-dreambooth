@@ -85,8 +85,8 @@ class PersonalizedBase(Dataset):
         if self.center_crop and not H == W:
             cropped = ((l,t,r,b) for l,r,t,b in (
                 (W - max) / 2.0, (W + max) / 2.0,
-                (H - max) / 2.0, (H + max) / 2.0)
-            )
+                (H - max) / 2.0, (H + max) / 2.0
+            ))
             image = image.crop([cropped])
                 
         if self.resolution is not None and not self.resolution >= max:
