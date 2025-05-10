@@ -102,31 +102,29 @@ class PersonalizedBase(Dataset):
 
         if not image.mode == "RGB":
             image = image.convert("RGB")
-
+        image = self.flip(image)
+        
         if self.per_image_tokens and np.random.uniform() < 0.25:
             text = random.choice(imagenet_dual_templates_small).format(self.placeholder_token, per_img_token_list[i % self.num_images])
         else:
             text = random.choice(imagenet_templates_small).format(self.placeholder_token)
 
         example["caption"] = text
-        H, W = image.height, image.width
-        max = min(H, W)
-        # default to score-sde preprocessing
+        W, H = image.width, image.height
+        max = min(W, H)
         if self.center_crop and not H == W:
-            cropped = [
-                (W - max) // 2, (H - max) // 2,
-                (W + max) // 2, (H + max) // 2
-            ]
-            image = image.crop(cropped)
-        
-        if self.size is not None:
+            l, t, r, b = [(W - max) / 2.0, (H - max) / 2.0,
+                          (W + max) / 2.0, (H + max) / 2.0]
+            image = image.crop([l, t, r, b])
+                
+        if self.resolution is not None and not self.resolution >= max:
             image = image.resize(
-                (self.size, self.size),
-                resample=self.interpolation,
+                (self.resolution, self.resolution),
+                resample=self.resampler,
                 reducing_gap=3
             )
         
-        image = self.flip(image)
         image = np.array(image).astype(np.uint8)
         example["image"] = (image / 127.5 - 1.0).astype(np.float32)
+        
         return example
