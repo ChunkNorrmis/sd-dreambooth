@@ -72,26 +72,27 @@ class PersonalizedBase(Dataset):
 
         if not image.mode == "RGB":
             image = image.convert("RGB")
-            
+        image = self.flip(image)
+        
         example["caption"] = ""
         if self.reg and self.coarse_class_text:
             example["caption"] = generic_captions_from_path(image_path, self.data_root, self.reg_tokens)
         else:
             example["caption"] = caption_from_path(image_path, self.data_root, self.coarse_class_text, self.placeholder_token)
             
-        H, W, = image.height, image.width
-        max = min(H, W)
+        W, H = image.width, image.height
+        max = min(W, H)
         if self.center_crop and not H == W:
-            cropped = [
-                (W - max) // 2, (H - max) // 2,
-                (W + max) // 2, (H + max) // 2
-            ]
-            image = image.crop(cropped)
+            l, t, r, b = [(W - max) / 2.0, (H - max) / 2.0,
+                          (W + max) / 2.0, (H + max) / 2.0]
+            image = image.crop([l, t, r, b])
                 
-        if self.resolution is not None and not self.resolution == max:
-            image = image.resize((self.resolution, self.resolution), resample=self.resampler)
-        
-        image = self.flip(image)
+        if self.resolution is not None and not self.resolution >= max:
+            image = image.resize(
+                (self.resolution, self.resolution),
+                resample=self.resampler,
+                reducing_gap=3
+            )
         
         image = np.array(image).astype(np.uint8)
         example["image"] = (image / 127.5 - 1.0).astype(np.float32)
